@@ -1,10 +1,10 @@
-import app_flask as app_flask
-
 import os
+import app_flask as app_flask
 from flask import Blueprint, Flask, request, jsonify
-
 import db.mongo_connection as mongo_connection
-
+import register as register
+import login as login
+ 
 app_blueprint = Blueprint('routes',__name__)
 
 @app_blueprint.route("/itWorks")
@@ -13,17 +13,13 @@ def defaultRoute():
 
 @app_blueprint.route("/create", methods=['POST'])
 def createNewUser():
-    if (request.json.get("email") == None or
-        request.json.get("user") == None or
-        request.json.get("password") == None):
-        raise Exception("É necessário enviar um objeto contendo as seguintes informações: {email, user, password}!")
+    idCreated = register.createUser(request.json)
+    return jsonify({"userCreatedId": idCreated})
 
-    client = mongo_connection.getClient()
-     
-    userCreated = client["fakeapi"]["users"].insert_one({
-        "email": request.json.get("email"),
-        "user": request.json.get("user"),
-        "password": request.json.get("password")
-    }) 
+@app_blueprint.route("/login", methods=['POST'])
+def loginUser():
+    return jsonify({"user": login.login(request.json)})
 
-    return jsonify({"userCreatedId": str(userCreated.inserted_id)})
+@app_blueprint.errorhandler(404)
+def errorHandler(error):
+    return error
