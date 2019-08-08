@@ -1,17 +1,17 @@
 import app_flask as app_flask
 
 import os
-from flask import Flask, request, jsonify
+from flask import Blueprint, Flask, request, jsonify
 
 import db.mongo_connection as mongo_connection
 
-app = app_flask.create_app()
+app_blueprint = Blueprint('routes',__name__)
 
-@app.route("/itWorks")
+@app_blueprint.route("/itWorks")
 def defaultRoute():
     return "Yes, it works!"
 
-@app.route("/create", methods=['POST'])
+@app_blueprint.route("/create", methods=['POST'])
 def createNewUser():
     if (request.json.get("email") == None or
         request.json.get("user") == None or
