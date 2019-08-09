@@ -3,16 +3,19 @@ from flask import abort, request
 import db.querys as querys
 import re
 import datetime
+import utils.md5_manager as md5_manager
 
 def createUser(user):
     validateUser(user)
 
     client = mongo_connection.getClient()
      
+    passwordEncrypted = md5_manager.encrypt(request.json.get("password"))
+
     userCreated = client["fakeapi"]["users"].insert_one({
         "email": request.json.get("email"),
         "username": request.json.get("username"),
-        "password": request.json.get("password"),
+        "password": passwordEncrypted,
         "created_in": datetime.datetime.now(),
         "last_access": "never"
     }) 

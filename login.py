@@ -3,14 +3,17 @@ from flask import abort, request
 import db.querys as querys
 from bson.json_util import dumps
 import datetime
+import utils.md5_manager as md5_manager
 
 def login(user):
     typeOfLogin = getTypeOfLogin(user)
 
+    passwordEncrypted = md5_manager.encrypt(request.json.get("password"))
+
     if typeOfLogin == "email":
-        return genericLogin("email",user.get("email"),user.get("password"))
+        return genericLogin("email",user.get("email"), passwordEncrypted)
     else:
-        return genericLogin("username",user.get("username"),user.get("password"))
+        return genericLogin("username",user.get("username"), passwordEncrypted)
 
 def getTypeOfLogin(user):
     if user.get("password") != None:
