@@ -4,16 +4,25 @@ import db.querys as querys
 from bson.json_util import dumps
 import datetime
 import utils.md5_manager as md5_manager
+import utils.exception_messages as exception_messages
+import utils.validator as validator
 
-def login(user):
+def login(jsonRequest):
+    validator.validateRequest(jsonRequest)
+
+    user = jsonRequest["user"]
+    application = jsonRequest["application"]
+
+    validator.validateRequiredParametersToLogin(user)
+
     typeOfLogin = getTypeOfLogin(user)
 
-    passwordEncrypted = md5_manager.encrypt(request.json.get("password"))
+    passwordEncrypted = md5_manager.encrypt(user["password"])
 
     if typeOfLogin == "email":
-        return genericLogin("email",user.get("email"), passwordEncrypted)
+        return genericLogin("email", user["email"], passwordEncrypted, application)
     else:
-        return genericLogin("username",user.get("username"), passwordEncrypted)
+        return genericLogin("username", user["username"], passwordEncrypted, application)
 
 def getTypeOfLogin(user):
     if user.get("password") != None:
@@ -22,14 +31,14 @@ def getTypeOfLogin(user):
         elif user.get("username") != None:
             return "username"
         else:
-            abort(400, 'É necessário enviar um objeto contendo as seguintes informações: {email ou username, password}.')
+            abort(400, exception_messages.getMsgRequisicaoInvalida())
     else:
-        abort(400, 'É necessário enviar um objeto contendo as seguintes informações: {email ou username, password}.')
+        abort(400, exception_messages.getMsgRequisicaoInvalida())
 
-def genericLogin(typeLogin, login, password):
+def genericLogin(typeLogin, login, password, application):
     qtdFound = querys.getQtdByQuery({
         typeLogin: login
-    })
+    }, application)
 
     if qtdFound == 0:
         abort(400, 'Não existe um usuário com este ' + typeLogin)
@@ -39,7 +48,7 @@ def genericLogin(typeLogin, login, password):
         "password": password
     },{
         "last_access": datetime.datetime.now()
-    })
+    }, application)
 
     if userFounded == None:
         abort(400, 'A senha informada está incorreta.')

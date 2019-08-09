@@ -1,23 +1,20 @@
 import db.mongo_connection as mongo_connection
 from pymongo import ReturnDocument
 
-def getQtdByQuery(query):
-    return findByQuery(query).count()
+def getQtdByQuery(query, application):
+    return findByQuery(query, application).count()
 
-def findByQuery(query):
+def findByQuery(query, application):
     client = mongo_connection.getClient()
+    return client[application]["users"].find(query)
 
-    return client["fakeapi"]["users"].find(query)
-
-def getSomeAtributesByQuery(query, atributes):
+def getSomeAtributesByQuery(query, atributes, application):
     client = mongo_connection.getClient()
+    return client[application]["users"].find(query, atributes)
 
-    return client["fakeapi"]["users"].find(query, atributes)
-
-def findAndUpdate(query, newAtributes):
+def findAndUpdate(query, newAtributes, application):
     client = mongo_connection.getClient()
-
-    return client["fakeapi"]["users"].find_one_and_update(
+    return client[application]["users"].find_one_and_update(
         query,
         {'$set': newAtributes},
         projection={"password": False},
