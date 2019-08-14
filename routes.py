@@ -1,15 +1,22 @@
-import os
 import app_flask as app_flask
-from flask import Blueprint, Flask, request, jsonify
+from flask import abort, Blueprint, Flask, request, jsonify
 import db.mongo_connection as mongo_connection
 import register as register
 import login as login
- 
+import utils.exception_messages as exception_messages
+import utils.validator as validator
+
 app_blueprint = Blueprint('routes',__name__)
 
 @app_blueprint.route("/itWorks")
 def defaultRoute():
     return "Yes, it works!"
+
+@app_blueprint.before_request
+def verifyToken():
+    if request.path != "/itWorks":
+        token = request.headers.get("authorization")
+        validator.validateTokenBeforeRequest(token)
 
 @app_blueprint.route("/create", methods=['POST'])
 def createNewUser():

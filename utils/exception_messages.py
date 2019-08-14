@@ -12,3 +12,6 @@ def getMsgRequisicaoInvalida():
     > O atributo email deve ser um email válido.
     > Os atributos username e password devem possuir ao menos 4 caracteres.
     """
+
+def getMsgTokenInexistente():
+   return "Esta API é protegida pelo Locksmith. É necessário setar um Token JWT no Header Authorization da sua requisição."

@@ -2,6 +2,8 @@ from flask import abort
 import utils.exception_messages as exception_messages
 import db.querys as querys
 import re
+import requests
+import os
 
 def validateRequest(request):
     if(request.get("user") == None or request.get("application") == None):
@@ -40,3 +42,16 @@ def validateIfUserAlreadyExists(user):
 
 def isEmailInvalidByRegex(email):
     return re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", email) == None
+
+def validateTokenBeforeRequest(token):
+	if (token == None):
+		abort(403, exception_messages.getMsgTokenInexistente())
+    
+	headers = {"authorization": "Bearer " + token}
+
+	url_to_authenticate_token = os.environ.get("URL_TO_AUTHENTICATE_TOKEN")
+
+	response = requests.get(url_to_authenticate_token, headers=headers)
+
+	if (response.status_code != 200):
+		abort(response.status_code, response.json()["msg"])
