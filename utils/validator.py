@@ -6,12 +6,12 @@ import requests
 import os
 
 def validateRequest(request):
-    if(request == None  or request.get("user") == None or request.get("application") == None):
-        abort(400, exception_messages.getMsgRequisicaoInvalida())
+	if(request == None  or request.get("user") == None or request.get("application") == None):
+		abort(400, exception_messages.getMsgRequisicaoInvalida())
 
-def validateUser(user):
+def validateUser(user, application):
 	validateRequiredParametersToCreate(user)
-	validateIfUserAlreadyExists(user)        
+	validateIfUserAlreadyExists(user, application)        
 
 def validateRequiredParametersToCreate(user):
 	email = user.get("email")
@@ -33,11 +33,11 @@ def validateRequiredParametersToLogin(user):
 		password == None or not password.strip() or len(password) < 4):
 		abort(400, exception_messages.getMsgRequisicaoInvalida())
 
-def validateIfUserAlreadyExists(user):
-    if (querys.getQtdByQuery({"email": user.get("email")}) > 0):
+def validateIfUserAlreadyExists(user, application):
+    if (querys.getQtdByQuery({"email": user.get("email")}, application) > 0):
         abort(400, 'Já existe um usuário com este email!')
 
-    if (querys.getQtdByQuery({"username": user.get("username")}) > 0):
+    if (querys.getQtdByQuery({"username": user.get("username")}, application) > 0):
         abort(400, 'Já existe um usuário com este nome de usuário!')
 
 def isEmailInvalidByRegex(email):
@@ -50,8 +50,8 @@ def validateTokenBeforeRequest(token):
 	headers = {"authorization": "Bearer " + token}
 
 	url_to_authenticate_token = os.environ.get("URL_TO_AUTHENTICATE_TOKEN")
-
-	response = requests.get("https://locksmith-api.herokuapp.com/auth", headers=headers)
+# 
+	response = requests.get(url_to_authenticate_token, headers=headers)
 
 	if (response.status_code != 200):
 		abort(response.status_code, response.json()["msg"])

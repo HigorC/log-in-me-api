@@ -20,8 +20,8 @@ def verifyToken():
 
 @app_blueprint.route("/create", methods=['POST'])
 def createNewUser():
-    idCreated = register.createUser(request.json)
-    return jsonify({"userCreatedId": idCreated})
+	idCreated = register.createUser(request.json)
+	return jsonify({"userCreatedId": idCreated})
 
 @app_blueprint.route("/login", methods=['POST'])
 def loginUser():

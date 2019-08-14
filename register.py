@@ -10,7 +10,7 @@ def createUser(jsonRequest):
 	user = jsonRequest["user"]
 	application = jsonRequest["application"]
 
-	validator.validateUser(user)
+	validator.validateUser(user, application)
      
 	passwordEncrypted = md5_manager.encrypt(user["password"])
 
