@@ -33,12 +33,12 @@ O fluxograma abaixo representa o funcionamento do *Log in me* em uma situação 
 
 ![Fluxo Geral](https://github.com/HigorC/log-in-me-api/blob/master/assets/fluxogramas/fluxo_geral.png)
 
-**1, 2.** Se uma API qualquer desejar se comunicar com o *Log in me*, o primeiro passo a se tomar é fazer uma requisição para o [Locksmith](https://github.com/HigorC/locksmith), lhe pedindo para gerar um Token JWT.
+**1, 2.** Se uma *API* qualquer desejar se comunicar com o *Log in me*, o primeiro passo a se tomar é fazer uma requisição para o [Locksmith](https://github.com/HigorC/locksmith), lhe pedindo para gerar um *Token JWT*.
 
-**3.** Com o Token em mãos, a API Qualquer o irá setar em seu Header Authorization e fazer uma requisição para o *Log in me*.
+**3.** Com o Token em mãos, a *API* Qualquer o irá setar em seu Header Authorization e fazer uma requisição para o *Log in me*.
 
-**4, 5.** Antes de realizar qualquer processamento, o *Log in me* realiza uma chamada ao [Locksmith](https://github.com/HigorC/locksmith) a fim de validar a autenticidade do Token recebido.
+**4, 5.** Antes de realizar qualquer processamento, o *Log in me* realiza uma chamada ao [Locksmith](https://github.com/HigorC/locksmith) a fim de validar a autenticidade do *Token* recebido.
 
-**6, 7.** Uma vez tendo sido validado o Token, o Log in me se comunica com o Banco de Dados MongoDB, verificando, validando e salvando o que for necessário.
+**6, 7.** Uma vez tendo sido validado o *Token*, o *Log in me* se comunica com o Banco de Dados *MongoDB*, verificando, validando e salvando o que for necessário.
 
 **8.** Por fim a requisição principal (passo 3) é respondida, retornando um objeto diferente conforme o que foi pedido.
