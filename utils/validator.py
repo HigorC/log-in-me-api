@@ -6,7 +6,7 @@ import requests
 import os
 
 def validateRequest(request):
-    if(request.get("user") == None or request.get("application") == None):
+    if(request == None  or request.get("user") == None or request.get("application") == None):
         abort(400, exception_messages.getMsgRequisicaoInvalida())
 
 def validateUser(user):
@@ -51,7 +51,7 @@ def validateTokenBeforeRequest(token):
 
 	url_to_authenticate_token = os.environ.get("URL_TO_AUTHENTICATE_TOKEN")
 
-	response = requests.get(url_to_authenticate_token, headers=headers)
+	response = requests.get("https://locksmith-api.herokuapp.com/auth", headers=headers)
 
 	if (response.status_code != 200):
 		abort(response.status_code, response.json()["msg"])
