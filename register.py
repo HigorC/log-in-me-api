@@ -23,5 +23,7 @@ def createUser(jsonRequest):
         "created_in": datetime.datetime.now(),
         "last_access": "never"
     }) 
-                
+
+	print(">> Usuário criado, o ID gerado foi: ", userCreated.inserted_id)
+
 	return str(userCreated.inserted_id)

@@ -2,9 +2,9 @@ def getMsgRequisicaoInvalida():
     return """ Para criar um usuário, o objeto passado na requisição deve seguir a seguinte estrutura:
      {
          "user":{
-            "email": exemplo@exemplo.com,
-            "username": exemplo,
-            "password": 1234.
+            "email": "exemplo@exemplo.com",
+            "username": "exemplo",
+            "password": 1234
          },
          "application": "exemplo"
     }

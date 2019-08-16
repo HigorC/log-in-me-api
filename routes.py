@@ -18,7 +18,7 @@ def verifyToken():
         token = request.headers.get("authorization")
         validator.validateTokenBeforeRequest(token)
 
-@app_blueprint.route("/create", methods=['POST'])
+@app_blueprint.route("/createUser", methods=['POST'])
 def createNewUser():
 	idCreated = register.createUser(request.json)
 	return jsonify({"userCreatedId": idCreated})
