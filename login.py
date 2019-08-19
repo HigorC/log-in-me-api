@@ -64,4 +64,5 @@ def genericLogin(typeLogin, login, password, application):
     return json.dumps(userFounded, sort_keys=True, indent=4, default=json_util.default)
 
 def generateLoginTokenInLocksmith():
-    return requests.get("http://localhost:5000/generateToken")
+    headers = {"authorization": request.headers.get("authorization")}
+    return requests.get("http://localhost:5000/generateToken", headers=headers)
