@@ -56,7 +56,7 @@ def validateTokenBeforeRequest(token):
     
 	headers = {"authorization": "Bearer " + token}
 
-	url_to_authenticate_token = os.environ.get("URL_TO_AUTHENTICATE_TOKEN", "http://localhost:5000/auth")
+	url_to_authenticate_token = os.environ.get("URL_TO_AUTHENTICATE_TOKEN", "http://localhost:5000/authenticateToken")
 
 	response = requests.get(url_to_authenticate_token, headers=headers)
 

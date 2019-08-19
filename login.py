@@ -6,6 +6,9 @@ import datetime
 import utils.md5_manager as md5_manager
 import utils.exception_messages as exception_messages
 import utils.validator as validator
+import requests
+import json
+from bson import json_util
 
 def login(jsonRequest):
     validator.validateRequest(jsonRequest)
@@ -53,4 +56,12 @@ def genericLogin(typeLogin, login, password, application):
     if userFounded == None:
         abort(400, 'A senha informada está incorreta.')
 
-    return dumps(userFounded)
+    token = generateLoginTokenInLocksmith()
+
+    userFounded["access_token"] = token.json().get("access_token")
+    userFounded["refresh_token"] = token.json().get("refresh_token")
+
+    return json.dumps(userFounded, sort_keys=True, indent=4, default=json_util.default)
+
+def generateLoginTokenInLocksmith():
+    return requests.get("http://localhost:5000/generateToken")

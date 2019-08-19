@@ -5,6 +5,7 @@ import register as register
 import login as login
 import utils.exception_messages as exception_messages
 import utils.validator as validator
+import json 
 
 app_blueprint = Blueprint('routes',__name__)
 
@@ -25,7 +26,7 @@ def createNewUser():
 
 @app_blueprint.route("/login", methods=['POST'])
 def loginUser():
-    return jsonify({"user": login.login(request.json)})
+	return login.login(request.json)
 
 @app_blueprint.errorhandler(404)
 def errorHandler(error):
