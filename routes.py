@@ -13,11 +13,18 @@ app_blueprint = Blueprint('routes',__name__)
 def defaultRoute():
     return "Yes, it works!"
 
+@app_blueprint.route("/itWorksWithToken", methods=['GET'])
+def defaultRouteWithToken():
+    return "Yes, it works with Token JWT!"
+
 @app_blueprint.before_request
 def verifyToken():
-    if request.path != "/itWorks":
-        token = request.headers.get("authorization")
-        validator.validateTokenBeforeRequest(token)
+	if request.path != "/itWorks" and request.path != "/isLogged":
+		token = request.headers.get("authorization")
+		is_valid, status_code, msg = validator.isTokenValid(token)
+
+		if is_valid is False:
+			abort(status_code, msg)
 
 @app_blueprint.route("/createUser", methods=['POST'])
 def createNewUser():
@@ -27,6 +34,19 @@ def createNewUser():
 @app_blueprint.route("/login", methods=['POST'])
 def loginUser():
 	return login.login(request.json)
+
+@app_blueprint.route("/isLogged", methods=['GET'])
+def isLogged():
+	token = request.headers.get("authorization")
+	is_valid, status_code, msg = validator.isTokenValid(token)
+
+	if is_valid is False:
+		if msg == "token_expired":
+			return jsonify({"isLogged": False})
+
+		abort(status_code, msg)
+
+	return jsonify({"isLogged": True})
 
 @app_blueprint.errorhandler(404)
 def errorHandler(error):
