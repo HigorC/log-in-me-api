@@ -7,11 +7,14 @@ import utils.exception_messages as exception_messages
 import utils.validator as validator
 import json 
 
+import config.init_config as init_config
+
 app_blueprint = Blueprint('routes',__name__)
 
 @app_blueprint.route("/itWorks")
 def defaultRoute():
-    return "Yes, it works!"
+	init_config.createAccountOnLocksmith()
+	return "Yes, it works!"
 
 @app_blueprint.route("/itWorksWithToken", methods=['GET'])
 def defaultRouteWithToken():
