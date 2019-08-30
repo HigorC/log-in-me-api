@@ -65,4 +65,4 @@ def genericLogin(typeLogin, login, password, application):
 
 def generateLoginTokenInLocksmith():
     headers = {"authorization": request.headers.get("authorization")}
-    return requests.get("http://localhost:5000/generateToken", headers=headers)
+    return requests.get("http://localhost:5000/generateToken/fakeapi", headers=headers)
