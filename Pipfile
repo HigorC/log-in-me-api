@@ -9,6 +9,7 @@ Flask = "*"
 pymongo = "*"
 dnspython = "*"
 requests = "*"
+pyjwt = "*"
 
 [requires]
 

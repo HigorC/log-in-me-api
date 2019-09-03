@@ -62,11 +62,11 @@ def isTokenValid(token):
 
 	if (response.status_code != 200):
 		if response.json().get("sub_status") == 1:
+			print("[x] >> Token inválido!")
+			return False, 403, response.json()["msg"]
+		elif response.json().get("sub_status") == 2:
 			print("[x] >> Token expirado!")
-			return False, response.status_code, "token_expired"
-
-		print("[x] >> Token inválido!")
-		return False, response.status_code, response.json()["msg"]
+			return False, 403, "token_expired"
 
 	print(">> Token validado!")
 	return True, 200, "Valided"

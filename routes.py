@@ -7,14 +7,20 @@ import utils.exception_messages as exception_messages
 import utils.validator as validator
 import json 
 
-import config.init_config as init_config
+import logging
 
+import managers.jwt_manager as jwt_manager
+
+import config.init_config as init_config
 app_blueprint = Blueprint('routes',__name__)
 
 @app_blueprint.route("/itWorks")
 def defaultRoute():
-	init_config.createAccountOnLocksmith()
-	return "Yes, it works!"
+	# init_config.createAccountOnLocksmith()
+
+	return jwt_manager.createToken()
+	# return jwt_manager.authenticateToken(request.headers.get("authorization"))
+	# return "Yes, it works!"
 
 @app_blueprint.route("/itWorksWithToken", methods=['GET'])
 def defaultRouteWithToken():
@@ -27,7 +33,7 @@ def verifyToken():
 		is_valid, status_code, msg = validator.isTokenValid(token)
 
 		if is_valid is False:
-			abort(status_code, msg)
+			abort(status_code)
 
 @app_blueprint.route("/createUser", methods=['POST'])
 def createNewUser():
@@ -41,16 +47,27 @@ def loginUser():
 @app_blueprint.route("/isLogged", methods=['GET'])
 def isLogged():
 	token = request.headers.get("authorization")
-	is_valid, status_code, msg = validator.isTokenValid(token)
 
-	if is_valid is False:
-		if msg == "token_expired":
-			return jsonify({"isLogged": False})
+	if jwt_manager.authenticateToken(token):
+		return jsonify({"isLogged": True}), 200
 
-		abort(status_code, msg)
+	return jsonify({"isLogged": False}), 200
 
-	return jsonify({"isLogged": True})
+
+	# is_valid, status_code, msg = validator.isTokenValid(token)
+
+	# if is_valid is False:
+	# 	if msg == "token_expired":
+	# 		return jsonify({"isLogged": False})
+
+	# 	abort(status_code, msg)
+
+	# return jsonify({"isLogged": True})
 
 @app_blueprint.errorhandler(404)
 def errorHandler(error):
     return error
+
+@app_blueprint.errorhandler(403)
+def errorHandler(error):
+    return exception_messages.getMsgTokenInexistente(), 403
