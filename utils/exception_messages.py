@@ -14,5 +14,4 @@ def getMsgRequisicaoInvalida():
     """
 
 def getMsgTokenInexistente():
-   return """Esta API é protegida pelo Locksmith. É necessário logar-se nele e enviar nesta requisição o Token gerado.
-    Caso já esteja fazendo isto, certifique-se que o Token não está expirado."""
+   return """Esta API é protegida pelo Locksmith. É necessário logar-se nele e enviar nesta requisição o Token gerado. Caso já esteja fazendo isto, certifique-se que o Token não está expirado."""

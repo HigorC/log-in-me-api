@@ -16,11 +16,7 @@ app_blueprint = Blueprint('routes',__name__)
 
 @app_blueprint.route("/itWorks")
 def defaultRoute():
-	# init_config.createAccountOnLocksmith()
-
-	return jwt_manager.createToken()
-	# return jwt_manager.authenticateToken(request.headers.get("authorization"))
-	# return "Yes, it works!"
+	return "Yes, it works!"
 
 @app_blueprint.route("/itWorksWithToken", methods=['GET'])
 def defaultRouteWithToken():
@@ -33,7 +29,7 @@ def verifyToken():
 		is_valid, status_code, msg = validator.isTokenValid(token)
 
 		if is_valid is False:
-			abort(status_code)
+			abort(status_code, msg)
 
 @app_blueprint.route("/createUser", methods=['POST'])
 def createNewUser():
@@ -53,21 +49,13 @@ def isLogged():
 
 	return jsonify({"isLogged": False}), 200
 
-
-	# is_valid, status_code, msg = validator.isTokenValid(token)
-
-	# if is_valid is False:
-	# 	if msg == "token_expired":
-	# 		return jsonify({"isLogged": False})
-
-	# 	abort(status_code, msg)
-
-	# return jsonify({"isLogged": True})
-
 @app_blueprint.errorhandler(404)
 def errorHandler(error):
     return error
 
 @app_blueprint.errorhandler(403)
 def errorHandler(error):
-    return exception_messages.getMsgTokenInexistente(), 403
+	return jsonify({
+		"message": exception_messages.getMsgTokenInexistente(),
+		"error": str(error)
+	}), 403
