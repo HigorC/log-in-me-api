@@ -29,7 +29,7 @@ def verifyToken():
 		is_valid, status_code, msg = validator.isTokenValid(token)
 
 		if is_valid is False:
-			abort(status_code)
+			abort(status_code, msg)
 
 @app_blueprint.route("/createUser", methods=['POST'])
 def createNewUser():
@@ -55,4 +55,7 @@ def errorHandler(error):
 
 @app_blueprint.errorhandler(403)
 def errorHandler(error):
-    return exception_messages.getMsgTokenInexistente(), 403
+	return jsonify({
+		"message": exception_messages.getMsgTokenInexistente(),
+		"error": str(error)
+	}), 403

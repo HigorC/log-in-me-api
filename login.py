@@ -58,8 +58,6 @@ def genericLogin(typeLogin, login, password, application):
         abort(400, 'A senha informada está incorreta.')
 
     userFounded["access_token"] = jwt_manager.createToken()
-    # userFounded["access_token"] = token.json().get("access_token")
-    # userFounded["refresh_token"] = token.json().get("refresh_token")
 
     return json.dumps(userFounded, sort_keys=True, indent=4, default=json_util.default)
 
