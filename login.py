@@ -9,7 +9,6 @@ import utils.validator as validator
 import requests
 import json
 from bson import json_util
-
 import managers.jwt_manager as jwt_manager
 
 def login(jsonRequest):
@@ -57,8 +56,6 @@ def genericLogin(typeLogin, login, password, application):
 
     if userFounded == None:
         abort(400, 'A senha informada está incorreta.')
-
-    # token = generateLoginTokenInLocksmith()
 
     userFounded["access_token"] = jwt_manager.createToken()
     # userFounded["access_token"] = token.json().get("access_token")
